@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="style.css" />
+<title>Рубежный контроль</title>
+</head>
+<body>
+    <header style="margin: 10px 10px;">
+        <h1>7. Оригами</h1>
+        <button type="button" class="btn btn-info" id="Open" data-toggle="modal" data-target="#SendForm">Открыть форму</button>
+    </header>
+    <main>
+        <h2>Добро пожаловать!</h2>
+        <p class="formel" id="JustText" style="color:gray;">Информация будет показана здесь...</p>
+        <div><!-- class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"-->
+            <form style="border-width: 2px; width: 250px; border-style: double; margin: 0 auto;" class="hiddenblock" id="SendForm" method="post" action="/reqres">
+                <h4>Добавить оригами</h4>
+                <div class="formel">
+                    <label for="Name">Название модели*</label>
+                    <input type="text" class="form-control" id="Name" name="Name" placeholder="Неизвестно" minlength="3" maxlength="12" required>
+                </div>
+                <div class="formel">
+                    <label for="Author">Размер листа*</label>
+                    <input type="number" class="form-control" id="ListSize" name="ListSize" placeholder="1" min="1" step="1" max="5" value="1" required>
+                </div>
+                <div class="formel">
+                    <label for="ModelDiff">Сложность модели*</label>
+                    <select class="form-select" id="ModelDiff" name="ModelDiff" style="width: 200px" required size="3">
+                        <option selected value="easy">Легко</option>
+                        <option value="norm">Средне</option>
+                        <option value="hard">Сложно</option>
+                    </select>
+                </div>
+                <div class="formel">
+                    <label class="form-check-label" for="Modul">Модульность</label>
+                    <input type="checkbox" class="form-check-input" id="Modul" name="Modul">
+                </div>
+                <div class="formel">
+                    <label for="Author">Автор</label>
+                    <input type="text" class="form-control" id="Author" name="Author" placeholder="Неизвестен" maxlength="12">
+                </div>
+                <div class="formel" style="display: flex;justify-content: space-between;">
+                    <button type="button" class="btn btn-info" id="Close" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-info" id="Send">Отправить</button>
+                </div>
+            </form>
+            <script>
+                let HideForm = function(e) { document.getElementById("SendForm").classList.remove('is-active'); };
+                document.getElementById("Open").onclick = function(e) { document.getElementById("SendForm").classList.add('is-active'); };
+                document.getElementById("Close").onclick = HideForm;
+                document.getElementById("Name").onblur = function (e) {
+                    var elm = document.getElementById("Name");
+                    var check = elm.validity;
+                    if (check.typeMismatch) elm.setCustomValidity("Неправильный тип у названия!");
+                    //if (check.valueMissing) elm.setCustomValidity("Заполните название!");
+                }
+                document.getElementById("ListSize").onblur = function (e) {
+                    var elm = document.getElementById("ListSize");
+                    var check = elm.validity;
+                    if (check.typeMismatch) elm.setCustomValidity("Неправильный тип у размера листа!");
+                    //if (check.valueMissing) elm.setCustomValidity("Заполните размер листа!");
+                }
+                document.getElementById("ModelDiff").onblur = function (e) {
+                    var elm = document.getElementById("ModelDiff");
+                    var check = elm.validity;
+                    if (check.typeMismatch) elm.setCustomValidity("Неправильный тип у сложности!");
+                    //if (check.valueMissing) elm.setCustomValidity("Заполните сложность!");
+                }
+
+                document.getElementById("Send").onclick = function(){
+                    if (document.getElementById("Name").validity.valid
+                && document.getElementById("ListSize").validity.valid
+                && document.getElementById("ModelDiff").validity.valid
+                && document.getElementById("Modul").validity.valid
+                && document.getElementById("Author").validity.valid){
+                    let objs = {
+                        name: document.getElementById("Name").value,
+                        list_size: document.getElementById("ListSize").value,
+                        difficulty: document.getElementById("ModelDiff").value,
+                        is_modul: document.getElementById("Modul").checked,
+                        author: document.getElementById("Author").value
+                    };
+                    console.table(objs);
+                    console.log("Посылается...");
+/*
+                    const response = fetch("/", {
+                    method: "POST",
+                     headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                    params: JSON.stringify({
+                        name: document.getElementById("Name").value,
+                        list_size: document.getElementById("ListSize").value,
+                        difficulty: document.getElementById("ModelDiff").value,
+                        is_modul: document.getElementById("Modul").checked,
+                        author: document.getElementById("Author").value
+                        })
+                    });
+                    if (response.ok == true){
+//не успел
+                    }
+                    console.log(objs);
+*/
+
+                    HideForm();
+                    //return false;
+
+                    }
+                }
+            </script>
+        </div>
+    </main>
+    <footer>
+        <hr>
+        <p>Трушин Владислав Алексеевич, группа 201-324</p>
+    </footer>
+</body>
+</html>
